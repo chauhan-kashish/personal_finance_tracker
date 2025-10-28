@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="fw-bold text-center mb-4">📊 Summary Report</h2>
+
+        <!-- Totals Section -->
+        <div class="row text-center mb-4">
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm">
+                    <h6>Total Income</h6>
+                    <h4 class="text-success fw-bold">₹{{ total_income }}</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm">
+                    <h6>Total Expense</h6>
+                    <h4 class="text-danger fw-bold">₹{{ total_expense }}</h4>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-3 border-0 shadow-sm">
+                    <h6>Balance</h6>
+                    <h4 class="text-primary fw-bold">₹{{ balance }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-4">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3">
+                    <h5 class="text-center">💸 Expense Breakdown</h5>
+                    <canvas id="expenseChart" height="220"></canvas>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm p-3">
+                    <h5 class="text-center">📈 Income vs Expense Trend</h5>
+                    <canvas id="trendChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js Script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Embed Chart Data Safely -->
+{{ category_labels|json_script:"category-labels" }}
+{{ category_values|json_script:"category-values" }}
+{{ trend_labels|json_script:"trend-labels" }}
+{{ trend_incomes|json_script:"trend-incomes" }}
+{{ trend_expenses|json_script:"trend-expenses" }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Load data from Django context
+    const categoryLabels = JSON.parse(document.getElementById('category-labels').textContent);
+    const categoryValues = JSON.parse(document.getElementById('category-values').textContent);
+    const trendLabels = JSON.parse(document.getElementById('trend-labels').textContent);
+    const trendIncomes = JSON.parse(document.getElementById('trend-incomes').textContent);
+    const trendExpenses = JSON.parse(document.getElementById('trend-expenses').textContent);
+
+    // Expense Breakdown Pie Chart
+    const ctx1 = document.getElementById('expenseChart').getContext('2d');
+    new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: categoryLabels,
+            datasets: [{
+                data: categoryValues,
+                backgroundColor: [
+                    '#4CAF50', '#FF6384', '#36A2EB', '#FFCE56', '#9966FF',
+                    '#FF9F40', '#009688', '#795548'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // Income vs Expense Line Chart
+    const ctx2 = document.getElementById('trendChart').getContext('2d');
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: trendLabels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: trendIncomes,
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76,175,80,0.1)',
+                    tension: 0.3,
+                    fill: true
+                },
+                {
+                    label: 'Expense',
+                    data: trendExpenses,
+                    borderColor: '#FF6384',
+                    backgroundColor: 'rgba(255,99,132,0.1)',
+                    tension: 0.3,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            },
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

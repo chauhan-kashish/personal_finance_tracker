@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %}Dashboard | Finance Tracker{% endblock %}
+{% block content %}
+<div class="mx-auto" style="max-width:980px;">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Welcome, {{ user.username }}</h2>
+    <div>
+      <a class="btn btn-outline-primary me-2" href="{% url 'add_income' %}">Add Income</a>
+      <a class="btn btn-outline-danger" href="{% url 'add_expense' %}">Add Expense</a>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card p-3">
+        <small class="text-muted">Total Income</small>
+        <h3 class="mt-2">₹{{ total_income }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3">
+        <small class="text-muted">Total Expense</small>
+        <h3 class="mt-2">₹{{ total_expense }}</h3>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card p-3">
+        <small class="text-muted">Balance</small>
+        <h3 class="mt-2">₹{{ balance }}</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+      <h5>Recent Income</h5>
+      <ul class="list-unstyled">
+        {% for inc in recent_income %}
+          <li class="mb-2">
+            <strong>{{ inc.date|date:"M d, Y" }}</strong> — ₹{{ inc.amount }} — <span class="text-muted">{{ inc.source|default:"-" }}</span>
+          </li>
+        {% empty %}
+          <li class="text-muted">No incomes yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col-md-6">
+      <h5>Recent Expense</h5>
+      <ul class="list-unstyled">
+        {% for exp in recent_expense %}
+          <li class="mb-2">
+            <strong>{{ exp.date|date:"M d, Y" }}</strong> — ₹{{ exp.amount }} — <span class="text-muted">{{ exp.category }}</span>
+          </li>
+        {% empty %}
+          <li class="text-muted">No expenses yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <a href="{% url 'view_transactions' %}" class="btn btn-outline-secondary">View All Transactions</a>
+    <a href="{% url 'reports' %}" class="btn btn-outline-primary ms-2">Reports</a>
+  </div>
+</div>
+{% endblock %}
+
