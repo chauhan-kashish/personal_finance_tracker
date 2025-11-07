@@ -10,12 +10,54 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">Finance Tracker</a>
-            <div>
-                <a class="nav-link d-inline" href="/dashboard/">Dashboard</a>
-                <a class="nav-link d-inline" href="/accounts/logout/">Logout</a>
+            <a class="navbar-brand" href="{% url 'home' %}">Finance Tracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'view_transactions' %}">Transactions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'reports' %}">Reports</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Add
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'add_income' %}">Add Income</a></li>
+                            <li><a class="dropdown-item" href="{% url 'add_expense' %}">Add Expense</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'add_category' %}">Add Category</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
     </nav>

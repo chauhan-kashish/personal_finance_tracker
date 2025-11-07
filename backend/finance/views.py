@@ -18,8 +18,6 @@ def home(request):
 def add_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
-        # ensure category queryset is user-specific
-        form.fields['category'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
             inc = form.save(commit=False)
             inc.user = request.user
@@ -27,8 +25,35 @@ def add_income(request):
             return redirect('dashboard')
     else:
         form = IncomeForm()
-        form.fields['category'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'finance/add_income.html', {'form': form})
+
+@login_required
+def edit_income(request, pk):
+    income = Income.objects.filter(pk=pk, user=request.user).first()
+    if not income:
+        messages.error(request, 'Income not found.')
+        return redirect('view_transactions')
+    if request.method == 'POST':
+        form = IncomeForm(request.POST, instance=income)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Income updated successfully.')
+            return redirect('view_transactions')
+    else:
+        form = IncomeForm(instance=income)
+    return render(request, 'finance/edit_income.html', {'form': form, 'income': income})
+
+@login_required
+def delete_income(request, pk):
+    income = Income.objects.filter(pk=pk, user=request.user).first()
+    if not income:
+        messages.error(request, 'Income not found.')
+        return redirect('view_transactions')
+    if request.method == 'POST':
+        income.delete()
+        messages.success(request, 'Income deleted successfully.')
+        return redirect('view_transactions')
+    return render(request, 'finance/delete_income.html', {'income': income})
 
 @login_required
 def add_expense(request):
@@ -44,6 +69,36 @@ def add_expense(request):
         form = ExpenseForm()
         form.fields['category'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'finance/add_expense.html', {'form': form})
+
+@login_required
+def edit_expense(request, pk):
+    expense = Expense.objects.filter(pk=pk, user=request.user).first()
+    if not expense:
+        messages.error(request, 'Expense not found.')
+        return redirect('view_transactions')
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=expense)
+        form.fields['category'].queryset = Category.objects.filter(user=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Expense updated successfully.')
+            return redirect('view_transactions')
+    else:
+        form = ExpenseForm(instance=expense)
+        form.fields['category'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'finance/edit_expense.html', {'form': form, 'expense': expense})
+
+@login_required
+def delete_expense(request, pk):
+    expense = Expense.objects.filter(pk=pk, user=request.user).first()
+    if not expense:
+        messages.error(request, 'Expense not found.')
+        return redirect('view_transactions')
+    if request.method == 'POST':
+        expense.delete()
+        messages.success(request, 'Expense deleted successfully.')
+        return redirect('view_transactions')
+    return render(request, 'finance/delete_expense.html', {'expense': expense})
 
 @login_required
 def view_transactions(request):

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Delete Account | Finance Tracker{% endblock %}
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width:560px;">
+  <h4 class="mb-3">Delete Account</h4>
+  <p class="text-danger">This action is permanent and cannot be undone.</p>
+  <p>Are you sure you want to delete your account? All your data will be permanently deleted.</p>
+  <form method="post" class="d-flex gap-2">
+    {% csrf_token %}
+    <button class="btn btn-danger">Yes, Delete My Account</button>
+    <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
+

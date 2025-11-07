@@ -3,13 +3,59 @@
 
 {% block title %}Register | Finance Tracker{% endblock %}
 {% block content %}
-<div class="card p-4">
+<div class="card p-4 mx-auto" style="max-width:720px;">
     <h2 class="text-center mb-3">Create Account</h2>
-    <form method="post">
+
+    <form method="post" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-primary w-100 mt-3" type="submit">Register</button>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                {{ form.first_name|add_class:"form-control"|attr:"placeholder:First name" }}
+                {{ form.first_name.errors }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                {{ form.last_name|add_class:"form-control"|attr:"placeholder:Last name" }}
+                {{ form.last_name.errors }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username|add_class:"form-control"|attr:"placeholder:Choose a username" }}
+                {{ form.username.errors }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.age.id_for_label }}">Age</label>
+                {{ form.age|add_class:"form-control"|attr:"placeholder:Age" }}
+                {{ form.age.errors }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+                {{ form.gender|add_class:"form-select" }}
+                {{ form.gender.errors }}
+            </div>
+
+            <div class="col-md-6"></div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.password1.id_for_label }}">Password</label>
+                {{ form.password1|add_class:"form-control"|attr:"placeholder:8+ characters" }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm password</label>
+                {{ form.password2|add_class:"form-control"|attr:"placeholder:Re-enter password" }}
+                {{ form.password2.errors }}
+            </div>
+        </div>
+
+        <button class="btn btn-primary w-100 mt-3" type="submit">Create account</button>
     </form>
+
     <p class="text-center mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
 </div>
 {% endblock %}

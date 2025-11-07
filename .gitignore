@@ -1,0 +1,65 @@
+# --- Python / Django ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+
+# Django specific
+*.log
+*.pot
+*.py,cover
+local_settings.py
+media/
+staticfiles/
+backend/staticfiles/
+
+
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Unit test / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# MyPy / Pyre / Pyright
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# --- Frontend / Node (if used) ---
+node_modules/
+*.tsbuildinfo
+build/
+dist/
+
+# --- Editors / IDEs ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+
+# --- Misc ---
+*.bak
+*.tmp
+*.orig

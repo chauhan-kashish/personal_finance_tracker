@@ -2,7 +2,11 @@
 {% load static %}
 
 {% block content %}
-<div class="container py-5">
+<style>
+/* Reduce global top spacing only on the reports page */
+.container.mt-5 { margin-top: 0.75rem !important; }
+</style>
+<div class="py-2">
     <div class="card shadow-sm p-4">
         <h2 class="fw-bold text-center mb-4">📊 Summary Report</h2>
 
@@ -28,12 +32,12 @@
             </div>
         </div>
 
-        <div class="text-center mb-4">
+        <div class="text-center mb-2">
             <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">← Back to Dashboard</a>
         </div>
 
         <!-- Charts Section -->
-        <div class="row mt-5">
+        <div class="row mt-3">
             <div class="col-md-6">
                 <div class="card shadow-sm p-3">
                     <h5 class="text-center">💸 Expense Breakdown</h5>
