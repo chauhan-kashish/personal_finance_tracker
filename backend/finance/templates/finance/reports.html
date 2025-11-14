@@ -1,54 +1,86 @@
-{% extends 'base.html' %}
+{% extends 'base_authenticated.html' %}
 {% load static %}
 
+{% block title %}Reports | Finance Tracker{% endblock %}
 {% block content %}
-<style>
-/* Reduce global top spacing only on the reports page */
-.container.mt-5 { margin-top: 0.75rem !important; }
-</style>
-<div class="py-2">
-    <div class="card shadow-sm p-4">
-        <h2 class="fw-bold text-center mb-4">📊 Summary Report</h2>
+<div class="mx-auto" style="max-width:1200px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1"><i class="fas fa-chart-bar me-2"></i>Financial Reports</h2>
+            <p class="text-muted mb-0">Comprehensive analysis of your finances</p>
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+        </a>
+    </div>
 
-        <!-- Totals Section -->
-        <div class="row text-center mb-4">
-            <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm">
-                    <h6>Total Income</h6>
-                    <h4 class="text-success fw-bold">₹{{ total_income }}</h4>
+    <!-- Totals Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="stats-card income">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <small>Total Income</small>
+                        <h3 class="mt-2 mb-0">₹{{ total_income }}</h3>
+                    </div>
+                    <div class="text-success" style="font-size: 2.5rem;">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm">
-                    <h6>Total Expense</h6>
-                    <h4 class="text-danger fw-bold">₹{{ total_expense }}</h4>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card expense">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <small>Total Expense</small>
+                        <h3 class="mt-2 mb-0">₹{{ total_expense }}</h3>
+                    </div>
+                    <div class="text-danger" style="font-size: 2.5rem;">
+                        <i class="fas fa-arrow-down"></i>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card p-3 border-0 shadow-sm">
-                    <h6>Balance</h6>
-                    <h4 class="text-primary fw-bold">₹{{ balance }}</h4>
+        </div>
+        <div class="col-md-4">
+            <div class="stats-card balance">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <small>Balance</small>
+                        <h3 class="mt-2 mb-0">₹{{ balance }}</h3>
+                    </div>
+                    <div class="text-primary" style="font-size: 2.5rem;">
+                        <i class="fas fa-wallet"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Expense Breakdown</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="expenseChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="text-center mb-2">
-            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">← Back to Dashboard</a>
-        </div>
-
-        <!-- Charts Section -->
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3">
-                    <h5 class="text-center">💸 Expense Breakdown</h5>
-                    <canvas id="expenseChart" height="220"></canvas>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line me-2"></i>Income vs Expense Trend</h5>
                 </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm p-3">
-                    <h5 class="text-center">📈 Income vs Expense Trend</h5>
-                    <canvas id="trendChart" height="220"></canvas>
+                <div class="card-body">
+                    <div style="height: 300px; position: relative;">
+                        <canvas id="trendChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { position: 'bottom' }
             }
@@ -124,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: { position: 'bottom' }
             },

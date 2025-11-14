@@ -3,59 +3,94 @@
 
 {% block title %}Register | Finance Tracker{% endblock %}
 {% block content %}
-<div class="card p-4 mx-auto" style="max-width:720px;">
-    <h2 class="text-center mb-3">Create Account</h2>
+<div class="row justify-content-center">
+  <div class="col-md-8 col-lg-7">
+    <div class="card p-4">
+      <div class="text-center mb-4">
+        <div class="mb-3">
+          <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--primary-color);"></i>
+        </div>
+        <h2 class="mb-2">Create Your Account</h2>
+        <p class="text-muted">Start tracking your finances today</p>
+      </div>
 
-    <form method="post" novalidate>
+      <form method="post" novalidate>
         {% csrf_token %}
 
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.first_name.id_for_label }}">First name</label>
+                <label class="form-label" for="{{ form.first_name.id_for_label }}">
+                    <i class="fas fa-user me-2"></i>First name
+                </label>
                 {{ form.first_name|add_class:"form-control"|attr:"placeholder:First name" }}
                 {{ form.first_name.errors }}
             </div>
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.last_name.id_for_label }}">Last name</label>
+                <label class="form-label" for="{{ form.last_name.id_for_label }}">
+                    <i class="fas fa-user me-2"></i>Last name
+                </label>
                 {{ form.last_name|add_class:"form-control"|attr:"placeholder:Last name" }}
                 {{ form.last_name.errors }}
             </div>
 
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.username.id_for_label }}">Username</label>
+                <label class="form-label" for="{{ form.username.id_for_label }}">
+                    <i class="fas fa-at me-2"></i>Username
+                </label>
                 {{ form.username|add_class:"form-control"|attr:"placeholder:Choose a username" }}
                 {{ form.username.errors }}
             </div>
 
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.age.id_for_label }}">Age</label>
+                <label class="form-label" for="{{ form.email.id_for_label }}">
+                    <i class="fas fa-envelope me-2"></i>Email
+                </label>
+                {{ form.email|add_class:"form-control"|attr:"placeholder:your.email@example.com"|attr:"type:email" }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label" for="{{ form.age.id_for_label }}">
+                    <i class="fas fa-birthday-cake me-2"></i>Age
+                </label>
                 {{ form.age|add_class:"form-control"|attr:"placeholder:Age" }}
                 {{ form.age.errors }}
             </div>
 
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.gender.id_for_label }}">Gender</label>
+                <label class="form-label" for="{{ form.gender.id_for_label }}">
+                    <i class="fas fa-venus-mars me-2"></i>Gender
+                </label>
                 {{ form.gender|add_class:"form-select" }}
                 {{ form.gender.errors }}
             </div>
 
-            <div class="col-md-6"></div>
-
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.password1.id_for_label }}">Password</label>
+                <label class="form-label" for="{{ form.password1.id_for_label }}">
+                    <i class="fas fa-lock me-2"></i>Password
+                </label>
                 {{ form.password1|add_class:"form-control"|attr:"placeholder:8+ characters" }}
                 {{ form.password1.errors }}
             </div>
             <div class="col-md-6">
-                <label class="form-label" for="{{ form.password2.id_for_label }}">Confirm password</label>
+                <label class="form-label" for="{{ form.password2.id_for_label }}">
+                    <i class="fas fa-lock me-2"></i>Confirm password
+                </label>
                 {{ form.password2|add_class:"form-control"|attr:"placeholder:Re-enter password" }}
                 {{ form.password2.errors }}
             </div>
         </div>
 
-        <button class="btn btn-primary w-100 mt-3" type="submit">Create account</button>
-    </form>
+        <button class="btn btn-primary w-100 mt-4 btn-lg" type="submit">
+          <i class="fas fa-user-plus me-2"></i>Create Account
+        </button>
+      </form>
 
-    <p class="text-center mt-3">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+      <p class="text-center mt-4 mb-0">
+        Already have an account? 
+        <a href="{% url 'login' %}" class="fw-bold">Login here</a>
+      </p>
+    </div>
+  </div>
 </div>
 {% endblock %}

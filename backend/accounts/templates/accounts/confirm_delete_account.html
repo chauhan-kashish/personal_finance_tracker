@@ -1,15 +1,39 @@
-{% extends 'base.html' %}
+{% extends 'base_authenticated.html' %}
 {% block title %}Delete Account | Finance Tracker{% endblock %}
 {% block content %}
-<div class="card p-4 mx-auto" style="max-width:560px;">
-  <h4 class="mb-3">Delete Account</h4>
-  <p class="text-danger">This action is permanent and cannot be undone.</p>
-  <p>Are you sure you want to delete your account? All your data will be permanently deleted.</p>
-  <form method="post" class="d-flex gap-2">
-    {% csrf_token %}
-    <button class="btn btn-danger">Yes, Delete My Account</button>
-    <a href="{% url 'profile' %}" class="btn btn-outline-secondary">Cancel</a>
-  </form>
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card p-4">
+      <div class="text-center mb-4">
+        <div class="mb-3">
+          <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: var(--danger-color);"></i>
+        </div>
+        <h3 class="mb-2">Delete Account</h3>
+        <p class="text-danger fw-bold mb-2">⚠️ This action is permanent and cannot be undone.</p>
+        <p class="text-muted">Are you sure you want to delete your account? All your data will be permanently deleted.</p>
+      </div>
+
+      <div class="alert alert-danger">
+        <i class="fas fa-info-circle me-2"></i>
+        <strong>Warning:</strong> This will permanently delete:
+        <ul class="mb-0 mt-2">
+          <li>All your income and expense records</li>
+          <li>All your categories</li>
+          <li>Your profile information</li>
+        </ul>
+      </div>
+
+      <form method="post" class="d-flex gap-2">
+        {% csrf_token %}
+        <button class="btn btn-danger btn-lg flex-fill" type="submit">
+          <i class="fas fa-trash me-2"></i>Yes, Delete My Account
+        </button>
+        <a href="{% url 'profile' %}" class="btn btn-outline-secondary btn-lg">
+          <i class="fas fa-times me-1"></i>Cancel
+        </a>
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
 

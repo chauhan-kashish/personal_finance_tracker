@@ -65,6 +65,7 @@ def edit_profile(request):
         if form.is_valid():
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
+            request.user.email = form.cleaned_data['email']
             request.user.save()
             form.save()
             messages.success(request, 'Profile updated successfully.')
@@ -73,6 +74,7 @@ def edit_profile(request):
         initial = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
+            'email': request.user.email,
         }
         form = ProfileForm(instance=profile_obj, initial=initial)
     return render(request, 'accounts/profile_edit.html', {'form': form})

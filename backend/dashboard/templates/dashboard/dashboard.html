@@ -1,70 +1,130 @@
-{% extends 'base.html' %}
+{% extends 'base_authenticated.html' %}
 {% load widget_tweaks %}
 {% block title %}Dashboard | Finance Tracker{% endblock %}
 {% block content %}
-<div class="mx-auto" style="max-width:980px;">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>Welcome, {{ user.username }}</h2>
+<div class="mx-auto" style="max-width:1200px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <a class="btn btn-outline-primary me-2" href="{% url 'add_income' %}">Add Income</a>
-      <a class="btn btn-outline-danger" href="{% url 'add_expense' %}">Add Expense</a>
+      <h2 class="mb-1">Welcome back, {{ user.username }}!</h2>
+      <p class="text-muted mb-0">Here's your financial overview</p>
+    </div>
+    <div>
+      <a class="btn btn-success me-2" href="{% url 'add_income' %}">
+        <i class="fas fa-plus-circle me-1"></i>Add Income
+      </a>
+      <a class="btn btn-danger" href="{% url 'add_expense' %}">
+        <i class="fas fa-minus-circle me-1"></i>Add Expense
+      </a>
     </div>
   </div>
 
-  <div class="row g-3 mb-4">
+  <div class="row g-4 mb-4">
     <div class="col-md-4">
-      <div class="card p-3">
-        <small class="text-muted">Total Income</small>
-        <h3 class="mt-2">₹{{ total_income }}</h3>
+      <div class="stats-card income">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <small>Total Income</small>
+            <h3 class="mt-2 mb-0">₹{{ total_income }}</h3>
+          </div>
+          <div class="text-success" style="font-size: 2.5rem;">
+            <i class="fas fa-arrow-up"></i>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card p-3">
-        <small class="text-muted">Total Expense</small>
-        <h3 class="mt-2">₹{{ total_expense }}</h3>
+      <div class="stats-card expense">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <small>Total Expense</small>
+            <h3 class="mt-2 mb-0">₹{{ total_expense }}</h3>
+          </div>
+          <div class="text-danger" style="font-size: 2.5rem;">
+            <i class="fas fa-arrow-down"></i>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="col-md-4">
-      <div class="card p-3">
-        <small class="text-muted">Balance</small>
-        <h3 class="mt-2">₹{{ balance }}</h3>
+      <div class="stats-card balance">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <small>Balance</small>
+            <h3 class="mt-2 mb-0">₹{{ balance }}</h3>
+          </div>
+          <div class="text-primary" style="font-size: 2.5rem;">
+            <i class="fas fa-wallet"></i>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="row">
+  <div class="row g-4">
     <div class="col-md-6">
-      <h5>Recent Income</h5>
-      <ul class="list-unstyled">
-        {% for inc in recent_income %}
-          <li class="mb-2">
-            <strong>{{ inc.date|date:"M d, Y" }}</strong> — ₹{{ inc.amount }} — <span class="text-muted">{{ inc.source|default:"-" }}</span>
-          </li>
-        {% empty %}
-          <li class="text-muted">No incomes yet.</li>
-        {% endfor %}
-      </ul>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-arrow-up me-2"></i>Recent Income</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            {% for inc in recent_income %}
+              <li class="d-flex justify-content-between align-items-center py-2">
+                <div>
+                  <strong>{{ inc.date|date:"M d, Y" }}</strong>
+                  <br>
+                  <span class="text-muted small">{{ inc.source|default:"No source" }}</span>
+                </div>
+                <div class="text-success fw-bold">+₹{{ inc.amount }}</div>
+              </li>
+            {% empty %}
+              <li class="text-muted text-center py-4">
+                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                No incomes yet.
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="col-md-6">
-      <h5>Recent Expense</h5>
-      <ul class="list-unstyled">
-        {% for exp in recent_expense %}
-          <li class="mb-2">
-            <strong>{{ exp.date|date:"M d, Y" }}</strong> — ₹{{ exp.amount }} — <span class="text-muted">{{ exp.category }}</span>
-          </li>
-        {% empty %}
-          <li class="text-muted">No expenses yet.</li>
-        {% endfor %}
-      </ul>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0"><i class="fas fa-arrow-down me-2"></i>Recent Expense</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            {% for exp in recent_expense %}
+              <li class="d-flex justify-content-between align-items-center py-2">
+                <div>
+                  <strong>{{ exp.date|date:"M d, Y" }}</strong>
+                  <br>
+                  <span class="text-muted small">{{ exp.category }}</span>
+                </div>
+                <div class="text-danger fw-bold">-₹{{ exp.amount }}</div>
+              </li>
+            {% empty %}
+              <li class="text-muted text-center py-4">
+                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                No expenses yet.
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="mt-4">
-    <a href="{% url 'view_transactions' %}" class="btn btn-outline-secondary">View All Transactions</a>
-    <a href="{% url 'reports' %}" class="btn btn-outline-primary ms-2">Reports</a>
+  <div class="mt-4 text-center">
+    <a href="{% url 'view_transactions' %}" class="btn btn-outline-primary me-2">
+      <i class="fas fa-list me-1"></i>View All Transactions
+    </a>
+    <a href="{% url 'reports' %}" class="btn btn-primary">
+      <i class="fas fa-chart-bar me-1"></i>Reports
+    </a>
   </div>
 </div>
 {% endblock %}

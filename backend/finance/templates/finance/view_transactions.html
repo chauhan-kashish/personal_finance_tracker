@@ -1,59 +1,111 @@
-{% extends 'base.html' %}
+{% extends 'base_authenticated.html' %}
 {% load widget_tweaks %}
 {% block title %}Transactions | Finance Tracker{% endblock %}
 {% block content %}
-<div class="card p-3 mx-auto" style="max-width:980px;">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Transactions</h4>
+<div class="mx-auto" style="max-width:1200px;">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
-      <a class="btn btn-sm btn-outline-primary" href="{% url 'add_income' %}">Add Income</a>
-      <a class="btn btn-sm btn-outline-danger" href="{% url 'add_expense' %}">Add Expense</a>
+      <h2 class="mb-1">All Transactions</h2>
+      <p class="text-muted mb-0">View and manage your income and expenses</p>
+    </div>
+    <div>
+      <a class="btn btn-success me-2" href="{% url 'add_income' %}">
+        <i class="fas fa-plus-circle me-1"></i>Add Income
+      </a>
+      <a class="btn btn-danger" href="{% url 'add_expense' %}">
+        <i class="fas fa-minus-circle me-1"></i>Add Expense
+      </a>
     </div>
   </div>
 
-  <h6 class="mt-2">Recent Incomes</h6>
-  <table class="table table-sm">
-    <thead class="table-light">
-      <tr><th>Date</th><th>Amount</th><th>Source</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-      {% for inc in incomes %}
-        <tr>
-          <td>{{ inc.date|date:"M d, Y" }}</td>
-          <td>₹{{ inc.amount }}</td>
-          <td>{{ inc.source|default:"-" }}</td>
-          <td>
-            <a href="{% url 'edit_income' inc.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-            <a href="{% url 'delete_income' inc.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      {% empty %}
-        <tr><td colspan="4" class="text-muted">No incomes found.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="card mb-4">
+    <div class="card-header">
+      <h5 class="mb-0"><i class="fas fa-arrow-up me-2"></i>Income Transactions</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Source</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inc in incomes %}
+              <tr>
+                <td><i class="fas fa-calendar-alt me-2 text-muted"></i>{{ inc.date|date:"M d, Y" }}</td>
+                <td><span class="badge bg-success">+₹{{ inc.amount }}</span></td>
+                <td>{{ inc.source|default:"No source" }}</td>
+                <td class="text-end">
+                  <a href="{% url 'edit_income' inc.id %}" class="btn btn-sm btn-outline-primary me-1">
+                    <i class="fas fa-edit"></i> Edit
+                  </a>
+                  <a href="{% url 'delete_income' inc.id %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i> Delete
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted py-5">
+                  <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                  No income transactions found.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-  <h6 class="mt-3">Recent Expenses</h6>
-  <table class="table table-sm">
-    <thead class="table-light">
-      <tr><th>Date</th><th>Amount</th><th>Note</th><th>Category</th><th>Actions</th></tr>
-    </thead>
-    <tbody>
-      {% for exp in expenses %}
-        <tr>
-          <td>{{ exp.date|date:"M d, Y" }}</td>
-          <td>₹{{ exp.amount }}</td>
-          <td>{{ exp.note|truncatechars:40 }}</td>
-          <td>{{ exp.category }}</td>
-          <td>
-            <a href="{% url 'edit_expense' exp.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-            <a href="{% url 'delete_expense' exp.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
-          </td>
-        </tr>
-      {% empty %}
-        <tr><td colspan="5" class="text-muted">No expenses found.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="card">
+    <div class="card-header">
+      <h5 class="mb-0"><i class="fas fa-arrow-down me-2"></i>Expense Transactions</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Note</th>
+              <th>Category</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for exp in expenses %}
+              <tr>
+                <td><i class="fas fa-calendar-alt me-2 text-muted"></i>{{ exp.date|date:"M d, Y" }}</td>
+                <td><span class="badge bg-danger">-₹{{ exp.amount }}</span></td>
+                <td>{{ exp.note|truncatechars:40|default:"No note" }}</td>
+                <td><span class="badge bg-secondary">{{ exp.category }}</span></td>
+                <td class="text-end">
+                  <a href="{% url 'edit_expense' exp.id %}" class="btn btn-sm btn-outline-primary me-1">
+                    <i class="fas fa-edit"></i> Edit
+                  </a>
+                  <a href="{% url 'delete_expense' exp.id %}" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-trash"></i> Delete
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-muted py-5">
+                  <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                  No expense transactions found.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
