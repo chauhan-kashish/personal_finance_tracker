@@ -4,20 +4,20 @@
 {% block title %}Register | Finance Tracker{% endblock %}
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-md-8 col-lg-7">
-    <div class="card p-4">
-      <div class="text-center mb-4">
-        <div class="mb-3">
-          <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--primary-color);"></i>
+  <div class="col-md-10 col-lg-8 col-xl-7">
+    <div class="card p-3 pt-2 pb-3">
+      <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+        <i class="fas fa-user-plus" style="font-size: 2.25rem; color: var(--primary-color);"></i>
+        <div class="text-start">
+          <h4 class="mb-1">Create Your Account</h4>
+          <p class="text-muted mb-0">Start tracking your finances today</p>
         </div>
-        <h2 class="mb-2">Create Your Account</h2>
-        <p class="text-muted">Start tracking your finances today</p>
       </div>
 
-      <form method="post" novalidate>
+      <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
 
-        <div class="row g-3">
+        <div class="row g-2">
             <div class="col-md-6">
                 <label class="form-label" for="{{ form.first_name.id_for_label }}">
                     <i class="fas fa-user me-2"></i>First name
@@ -66,6 +66,14 @@
             </div>
 
             <div class="col-md-6">
+                <label class="form-label" for="{{ form.photo.id_for_label }}">
+                    <i class="fas fa-image me-2"></i>Profile photo (optional)
+                </label>
+                {{ form.photo|add_class:"form-control" }}
+                {{ form.photo.errors }}
+            </div>
+
+            <div class="col-md-6">
                 <label class="form-label" for="{{ form.password1.id_for_label }}">
                     <i class="fas fa-lock me-2"></i>Password
                 </label>
@@ -81,12 +89,12 @@
             </div>
         </div>
 
-        <button class="btn btn-primary w-100 mt-4 btn-lg" type="submit">
+        <button class="btn btn-primary w-100 mt-3" type="submit">
           <i class="fas fa-user-plus me-2"></i>Create Account
         </button>
       </form>
 
-      <p class="text-center mt-4 mb-0">
+      <p class="text-center mt-3 mb-0">
         Already have an account? 
         <a href="{% url 'login' %}" class="fw-bold">Login here</a>
       </p>

@@ -3,16 +3,18 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(max_length=150, required=True, label="First name")
     last_name = forms.CharField(max_length=150, required=True, label="Last name")
     email = forms.EmailField(required=True, label="Email", help_text="Required. Enter a valid email address.")
     age = forms.IntegerField(min_value=13, max_value=120, required=True, label="Age")
     gender = forms.ChoiceField(choices=UserProfile.GENDER_CHOICES, required=True, label="Gender")
+    photo = forms.ImageField(required=False, label="Profile photo")
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("first_name", "last_name", "email", "age", "gender", "username", "password1", "password2")
+        fields = ("first_name", "last_name", "email", "age", "gender", "photo", "username", "password1", "password2")
         help_texts = {
             "username": "",
             "password1": "",
@@ -36,6 +38,7 @@ class CustomUserCreationForm(UserCreationForm):
                 user=user,
                 age=self.cleaned_data["age"],
                 gender=self.cleaned_data["gender"],
+                photo=self.cleaned_data.get("photo"),
             )
         return user
 
@@ -47,7 +50,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ("age", "gender")
+        fields = ("age", "gender", "photo")
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

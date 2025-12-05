@@ -85,8 +85,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'finance_db',
+        'USER': 'root',
+        'PASSWORD': 'AimHigh',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -129,6 +133,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ BASE_DIR.parent / 'backend' / 'static' ]   # personal_finance_tracker/frontend/static
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Media files (user-uploaded content)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -137,10 +145,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Email Configuration (for password reset)
 # For development: emails are printed to console
 # For production: configure SMTP settings
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''  # Set your email here for production
-EMAIL_HOST_PASSWORD = ''  # Set your email password here for production
+EMAIL_HOST_USER = 'kashish.chauhan0125@gmail.com'  # Set your email here for production
+EMAIL_HOST_PASSWORD = 'xewg ycka otcu ihai'  # Set your email password here for production
 DEFAULT_FROM_EMAIL = 'Finance Tracker <noreply@financetracker.com>'

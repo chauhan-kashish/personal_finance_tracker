@@ -5,13 +5,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm, ProfileForm
 
+
 # Register User
 def register_user(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, 'Account created successfully! Please log in.')
@@ -61,7 +62,7 @@ def edit_profile(request):
         profile_obj = UserProfile.objects.create(user=request.user, age=18, gender='P')
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, instance=profile_obj)
+        form = ProfileForm(request.POST, request.FILES, instance=profile_obj)
         if form.is_valid():
             request.user.first_name = form.cleaned_data['first_name']
             request.user.last_name = form.cleaned_data['last_name']
